@@ -29,7 +29,7 @@ public class AdminContoller {
 	private AdminService service;
 	
 	@RequestMapping("/adRegister")
-	public String Food_list(HttpSession session) {
+	public String adRegister(HttpSession session) {
 		int result = (int)session.getAttribute("user_admin");
 		if(result == 1) {
 			return "/admin/adRegister";
@@ -41,7 +41,7 @@ public class AdminContoller {
 		
 	
 	@PostMapping("/adRegist")
-	public String adRegister(AdminVO vo,HttpServletRequest request) {
+	public String adRegist(AdminVO vo,HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
 		
 		//서비스 처리 ... 
