@@ -23,7 +23,7 @@
 			<div class="inner">
 				<header>
 					<h1>
-						<a href="/board/list" id="logo">게시글 등록</a>
+						<a href="/food/Food_Map" id="logo">게시글 등록</a>
 					</h1>
 				</header>
 			</div>
@@ -105,7 +105,7 @@
 														<button type="button" class="btn btn-primary"
 															onclick="register()">등록</button>
 														<button type="button" class="btn btn-primary"
-															onclick="location.href='list?pageNum=${cri.pageNum}&count=${cri.count }'">취소</button>
+															onclick="location.href='javascript:history.back();'">취소</button>
 													</div>
 													
 												</form>
