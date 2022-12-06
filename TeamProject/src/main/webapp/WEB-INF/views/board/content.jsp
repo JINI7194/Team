@@ -68,14 +68,21 @@
             <label>작성자</label>
             <input class="form-control" value="${board.writer }" readonly="readonly">
           </div>
-          <form name="readForm" role="form" method="post">
-			<span style="display: inline;">파일 목록</span>
-				<div class="form-group" style="border: 1px solid #dbdbdb; display: inline;" >
-					<c:forEach var="file" items="${file}">
-						<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br>
-					</c:forEach>
-				</div>
-			</form>
+          <br>
+          <!-- file 이 보여질 영역 -->
+          <div class="form-group">
+            <label>첨부파일 목록</label>
+            <div class="uploadResult">
+					<ul>
+					<li></li>
+					</ul>								
+			</div>				
+			<div class='bigPictureWrapper'>
+				s	<div class='bigPicture'>
+					</div>
+					</div>
+          </div>
+          
           <!-- 페이징 -->
           <!-- 9. 목록으로 이동시 pageNum과 count값을 넘김 -->
           <!-- 10. 변경을 클릭시 pageNum과 count값을 넘김 -->
@@ -161,9 +168,123 @@
 		form.attr("action", "/board/modify");
 		form.submit();
 	});	
+</script>
+
+<script>
+	$(document).ready(function() {
+		(function() {
+			var seq_bno = '<c:out value="${board.bno}"/>';
+			console.log(seq_bno)
+			$.getJSON("/board/getAttachList", {seq_bno: seq_bno}, function(arr){
+				console.log(arr);
+				
+				var str = "";
+				$(arr).each(function(i, attach) {
+					// image type
+					if(attach.fileType) {
+						
+						var fileCallPath = encodeURIComponent(attach.uploadPath+ "/s_" + attach.uuid+"_"+attach.fileName);
+						str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"'";
+						str += " data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'><div>";
+						str += "<img src='/display?fileName="+fileCallPath+"'></div></li>";
+					} else {
+						//var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
+						//var fileLink = fileCallPath.replace(new RegExp(/\\/g), "/");
+						str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"'";
+						str += " data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'><div>";
+						str += "<span>"+attach.fileName+"</span>";
+						str += "<img src='../img/attach.png'></a></div></li>";
+					}
+				});
+				$(".uploadResult ul").html(str);						
+				
+			}); // end getJson
+		})();
+	
+	$(".uploadResult").on("click", "li", function(e){
+		console.log("view image");
+		var liObj = $(this);
+		var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+		if(liObj.data("type")) {
+			showImage(path.replace(new RegExp(/\\/g),"/"));
+		} else {
+			//download
+			self.location = "/download?fileName="+path
+		}
+	});
+	function showImage(fileCallPath) {
+	
+		$(".bigPictureWrapper").css("display","flex").show();
+	
+		$(".bigPicture")
+		.html("<img src='/display?fileName="+fileCallPath+"'>").animate({width:'100%', height: '100%'}, 1000);
+	}
+		
+		$(".bigPictureWrapper").on("click", function(e) {
+		$(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+		setTimeout(() => {
+			$(this).hide();
+		}, 1000);
+		});
+	
+		
+});
+	
 </script>		
 				
+<style>
 
+	.uploadResult {
+	 width:100%
+     background-color: gray;
+	}
+
+	.uploadResult ul {
+ 	display:flex;
+ 	flex-flow: row;
+ 	justify-content: center;
+ 	align-items: center;
+	}
+
+	.uploadResult ul li {
+ 	list-style: none;
+	padding: 10px;
+	align-content: center;
+	text-align: center;
+	}
+	
+	.uploadResult ul li img {
+	 width 100px;
+	} 
+
+	.uploadResult ul li span {
+	color: white;
+	}
+	
+	.bigPictureWrapper {
+	position: absolute;
+	display: none;
+	justify-content: center;
+	top: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	z-index: 100;
+	background:rgba(255,255,255,0.5);
+	}
+	
+	.bigPicture {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	}
+	
+	.bigPicture img{
+		width:1000px;
+	}
+	
+	</style>
 
 
 

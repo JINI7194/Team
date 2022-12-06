@@ -25,9 +25,5 @@ public interface BoardMapper {
 	//top 게시글 가져오기
 	public List<BoardVO> topList();
 	
-	//첨부파일 등록
 	
-	//첨부파일 상세보기
-	
-	//첨부파일 다운로드
 }

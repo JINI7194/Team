@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.company.board.command.BoardAttachVO;
 import com.company.board.command.BoardVO;
 import com.company.board.command.Criteria;
 import com.company.board.mapper.BoardAttachMapper;
@@ -57,6 +58,7 @@ public class BoardServiceImpl implements BoardService {
 		return total;
 	}
 	
+	//게시글 등록처리
 	@Transactional
 	@Override
 	public void register(BoardVO vo) {
@@ -105,5 +107,11 @@ public class BoardServiceImpl implements BoardService {
 		
 	}
 
-	
+	//첨부파일 조회
+	@Override
+	public List<BoardAttachVO> getAttachList(int seq_bno) {
+		System.out.println("get Attach list by seq_bno : "+ seq_bno);
+		return attachMapper.findByBno(seq_bno);
+		
+	}
 }
