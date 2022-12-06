@@ -2,13 +2,11 @@ package com.company.admin.service;
 
 import java.util.ArrayList;
 
-
-
 import com.company.admin.command.AdminCriteria;
 import com.company.admin.command.AdminVO;
 
 public interface AdminService {
- 	public ArrayList<AdminVO> adGetList(int count_oracle,int adpageStart,int num1);
+	public ArrayList<AdminVO> adGetList(AdminCriteria adcri);
 	
 	public void adRegister(AdminVO vo);
 	public AdminVO adContent(int num);
